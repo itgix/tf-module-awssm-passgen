@@ -1,8 +1,3 @@
-variable "aws_region" {
-  description = "AWS region for the Secrets Manager"
-  type        = string
-}
-
 variable "custom_secrets" {
   description = "List of custom secrets to create"
   type = list(object({
@@ -10,7 +5,7 @@ variable "custom_secrets" {
     length           = number
     special          = optional(bool)
     override_special = optional(string)
-    keepers = optional(map(string))
+    keepers          = optional(map(string))
   }))
 }
 

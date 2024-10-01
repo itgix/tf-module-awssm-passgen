@@ -27,6 +27,10 @@ module "secrets-password-module" {
     {
       secret_name = "anotherSecret"
       length      = 20
+    },
+    {
+      secret_name = "secretForManualEdit"
+      empty       = true
     }
   ]
 

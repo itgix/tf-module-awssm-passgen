@@ -2,10 +2,11 @@ variable "custom_secrets" {
   description = "List of custom secrets to create"
   type = list(object({
     secret_name      = string
-    length           = number
+    length           = optional(number)
     special          = optional(bool)
     override_special = optional(string)
     keepers          = optional(map(string))
+    empty            = optional(bool, false)
   }))
 }
 

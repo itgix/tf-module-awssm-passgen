@@ -24,7 +24,7 @@ resource "aws_secretsmanager_secret_version" "version_empty" {
   for_each = { for secret in var.custom_secrets : secret.secret_name => secret if lookup(secret, "empty", false) }
 
   secret_id     = aws_secretsmanager_secret.secret[each.key].id
-  secret_string = ""
+  secret_string = "editme"
 
   lifecycle {
     ignore_changes = [

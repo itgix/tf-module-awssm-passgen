@@ -6,7 +6,7 @@ variable "custom_secrets" {
     special          = optional(bool)
     override_special = optional(string)
     keepers          = optional(map(string))
-    empty            = optional(bool, false)
+    manual           = optional(bool, false)
   }))
 }
 

@@ -30,7 +30,7 @@ module "secrets-password-module" {
     },
     {
       secret_name = "secretForManualEdit"
-      empty       = true
+      manual      = true
     }
   ]
 

@@ -19,7 +19,7 @@ resource "aws_secretsmanager_secret_version" "version" {
   secret_string = coalesce(
     lookup(each.value, "value", null),
     lookup(each.value, "manual", false) ? "editme" : null,
-    random_password.password[each.key].result
+    try(random_password.password[each.key].result, null)
   )
 }
 

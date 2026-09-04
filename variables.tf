@@ -28,3 +28,9 @@ variable "secret_keepers" {
   type        = map(map(string))
   default     = {}
 }
+
+variable "tags" {
+  description = "Tags to apply to the secrets"
+  type        = map(string)
+  default     = {}
+}

@@ -8,7 +8,14 @@ variable "custom_secrets" {
     keepers          = optional(map(string))
     manual           = optional(bool, false)
     value            = optional(string)
+    tags             = optional(map(string), {})
   }))
+}
+
+variable "tags" {
+  description = "Map of tags to apply to all created secrets. Merged with per-secret tags, where per-secret tags take precedence."
+  type        = map(string)
+  default     = {}
 }
 
 variable "secret_name_prefix" {

@@ -23,6 +23,9 @@ module "secrets-password-module" {
       length           = 16
       special          = true
       override_special = "!@#$%^&*"
+      tags = {
+        "Team" = "platform"
+      }
     },
     {
       secret_name = "anotherSecret"
@@ -40,6 +43,11 @@ module "secrets-password-module" {
     "mySecret" = {
       "ami_id" = "ami-12345678"
     }
+  }
+
+  tags = {
+    "Environment" = "dev"
+    "ManagedBy"   = "terraform"
   }
 }
 ```
@@ -61,9 +69,11 @@ You can access the following outputs:
   - `special`: Boolean flag to include special characters (optional).
   - `override_special`: Custom string of special characters to use (optional).
   - `keepers`: A map of key-value pairs used for dynamic regeneration (optional).
+  - `tags`: A map of tags to apply to this specific secret. Merged with the module-wide `tags`, taking precedence on key conflicts (optional).
 - `secret_name_prefix`: Prefix for secret names (optional).
 - `secret_name_suffix`: Suffix for secret names (optional).
 - `secret_keepers`: Map of keepers for the secrets (optional).
+- `tags`: Map of tags applied to all created secrets. Merged with per-secret `tags` (optional).
 
 ## Notes
 

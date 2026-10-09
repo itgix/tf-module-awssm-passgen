@@ -67,11 +67,12 @@ resource "aws_secretsmanager_secret_version" "version" {
   )
 
   # A new value is only written when this number changes.
-  # - manual: derived from the value, so changing the value writes a new version.
+  # - manual: derived from the value only, so changing the value writes a new
+  #   version and `version` is ignored.
   # - random: the configured version, 1 when omitted.
   secret_string_wo_version = (
     each.value.manual ?
-    parseint(substr(sha256("${coalesce(each.value.value, "editme")}|${coalesce(each.value.version, 0)}"), 0, 7), 16) :
+    parseint(substr(sha256(coalesce(each.value.value, "editme")), 0, 7), 16) :
     coalesce(each.value.version, 1)
   )
 }

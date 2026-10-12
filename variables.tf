@@ -1,13 +1,19 @@
 variable "custom_secrets" {
-  description = "List of custom secrets to create"
+  description = <<-EOT
+    List of secrets to create in AWS Secrets Manager.
+    A random secret (manual = false) is generated once and stays static; set or raise
+    `version` to rotate it. `version` applies to random secrets only and is ignored
+    for manual ones. A manual secret is written with `value` (or "editme");
+    changing `value` writes a new secret version.
+  EOT
   type = list(object({
     secret_name      = string
-    length           = optional(number)
-    special          = optional(bool)
+    length           = optional(number, 32)
+    special          = optional(bool, false)
     override_special = optional(string)
-    keepers          = optional(map(string))
     manual           = optional(bool, false)
     value            = optional(string)
+    version          = optional(number)
     tags             = optional(map(string), {})
   }))
 }
@@ -28,10 +34,4 @@ variable "secret_name_suffix" {
   description = "Suffix for secret names"
   type        = string
   default     = ""
-}
-
-variable "secret_keepers" {
-  description = "Map of keepers for the secrets"
-  type        = map(map(string))
-  default     = {}
 }

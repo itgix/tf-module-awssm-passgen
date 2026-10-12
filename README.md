@@ -37,7 +37,7 @@ module "secrets-password-module" {
     {
       secret_name = "anotherSecret"
       length      = 20
-      version     = 2 # rotated once when raised from 1 (or from omitted) to 2
+      version     = 2 # set to 1 to rotate once, raise to 2 to rotate again
     },
     {
       secret_name = "secretForManualEdit"
@@ -84,9 +84,11 @@ The module does not output secret values. Consumers read them from AWS Secrets M
 
 - **Omitted:** the secret is static. If it already exists in AWS Secrets Manager its current value is
   kept; if it does not exist, a random value is generated once.
-- **Set or raised:** exactly one new secret version with a newly generated value is written on the next
-  apply. After that the secret is static again until `version` changes once more.
+- **Set `version = 1`** on a secret that had none: exactly one new secret version with a newly generated
+  value is written on the next apply. After that the secret is static again until `version` changes.
+- **Raise the number** (2, 3, ...) to rotate again; each raise writes exactly one new value.
 - **Never lower `version`.** Any change of the number writes a new value; only raise it.
+- The number is a rotation counter, not the Secrets Manager version id.
 - **Do not set `version` while upgrading from v1.0.x** unless you want that secret rotated in the same
   apply.
 - **Manual secrets** ignore rotation: a changed `value` writes a new secret version, an unchanged
@@ -105,6 +107,8 @@ The module does not output secret values. Consumers read them from AWS Secrets M
   is deleted. No flag or manual step is needed.
 - A **replace** of a secret version in that plan means a `version` was set or a manual `value` changed,
   and that secret will get a new value.
+- A random secret that had `value` set in v1.0.x is now rejected by validation; set `manual = true` to
+  keep that value, or remove `value` to let it be generated (which rotates it).
 
 ## Notes
 
@@ -116,3 +120,5 @@ The module does not output secret values. Consumers read them from AWS Secrets M
   `secretsmanager:ListSecrets` and `secretsmanager:GetSecretValue` on those secrets.
 - Known edge case: a secret that exists in AWS Secrets Manager but has no `AWSCURRENT` version makes the
   plan fail. Delete that secret or set `version` on it.
+- The module tag with these `version` semantics is v1.1.1 (v1.1.0 had `version = 1` equal to omitted;
+  nothing shipped on it).
